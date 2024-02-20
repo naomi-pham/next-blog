@@ -1,3 +1,4 @@
+import { ThemeProvider } from 'next-themes'
 import { Montserrat } from 'next/font/google'
 import { ReactNode } from 'react'
 import Footer from './Footer'
@@ -10,13 +11,15 @@ const montserrat = Montserrat({
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div
-      className={`${montserrat.className} text-body-2 text-neutral-lightGrey`}
-    >
-      <Header />
-      {children}
-      <Footer />
-    </div>
+    <ThemeProvider attribute="class" enableSystem={true}>
+      <div
+        className={`${montserrat.className} min-h-screen bg-neutral-white text-body-2 text-neutral-lightGrey dark:bg-neutral-black dark:text-neutral-silver`}
+      >
+        <Header />
+        {children}
+        <Footer />
+      </div>
+    </ThemeProvider>
   )
 }
 

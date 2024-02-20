@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-link {
+  @apply text-heading-4 capitalize text-neutral-darkGrey underline
+}
+
+.dark .custom-link {
+  @apply text-neutral-white
+}
+
+.custom-link:hover {
+  @apply opacity-80
+}

@@ -16,18 +16,29 @@ git clone https://github.com/naomi-pham/next-blog.git
 ```
 
 ```
+cd next-blog
 npm install
 ```
 
 ### Add API URL to `.env` file
 
-Create mock data at [Mock API](https://mockapi.io/) and add the API link to your `.env` file: 
-
-Example: 
+Create mock data at [Mock API](https://mockapi.io/) and add the API link to your `.env` file (or use the following API): 
 
 ```
 // .env
 NEXT_PUBLIC_MOCK_API = https://65d4c1213f1ab8c63435ed16.mockapi.io/api
+```
+
+Schema: 
+
+```
+{
+  datePublished: string
+  title: string
+  content: string
+  image: string
+  id: string
+}
 ```
 
 ## Run the project locally
@@ -36,7 +47,7 @@ NEXT_PUBLIC_MOCK_API = https://65d4c1213f1ab8c63435ed16.mockapi.io/api
 npm run dev
 ```
 
-Navigate to `locahost:3000` to view the project.
+Navigate to http://locahost:3000 to view the project.
 
 ## Deployment
 

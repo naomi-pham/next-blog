@@ -13,3 +13,9 @@
 .custom-link:hover {
   @apply opacity-80
 }
+
+@media (max-width: 480px) {
+  .custom-link {
+    @apply text-body-3 font-medium
+  }
+}

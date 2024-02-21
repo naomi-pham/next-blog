@@ -1,6 +1,7 @@
 import GoBackButton from '@/components/common/navigation/GoBackButton'
-import { PostData } from '@/constants/data'
 import { IPost } from '@/constants/interfaces'
+import { format } from 'date-fns'
+import Image from 'next/image'
 
 export async function getStaticPaths() {
   if (process.env.SKIP_BUILD_STATIC_GENERATION) {
@@ -10,8 +11,11 @@ export async function getStaticPaths() {
     }
   }
 
-  const paths = PostData.map((post: IPost) => ({
-    params: { id: post.id.toString() },
+  const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts`)
+  const posts = (await res.json()) as IPost[]
+
+  const paths = posts.map((post: IPost) => ({
+    params: { id: post.id },
   }))
 
   // { fallback: false } means other routes should 404
@@ -24,9 +28,11 @@ export const getStaticProps = async ({
   params: { id: string }
 }) => {
   const id = params.id
-  const post = PostData.find((post) => post.id.toString() === id)
 
-  return { props: { post } }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts/${id}`)
+  const post = (await res.json()) as IPost
+
+  return { props: { post: { ...post } } }
 }
 
 const PostPage = ({ post }: { post: IPost }) => {
@@ -40,10 +46,25 @@ const PostPage = ({ post }: { post: IPost }) => {
             {post.title}
           </h2>
           <p className="text-body-3 tracking-widest text-neutral-grey dark:text-neutral-greyBlue">
-            {post.datePublished} | Next Blog
+            {post?.datePublished ? (
+              <span>{format(post.datePublished, 'MMM dd, yyyy')}</span>
+            ) : (
+              '-'
+            )}{' '}
+            | Next Blog
           </p>
         </div>
-        <div className="aspect-video w-full bg-neutral-silver dark:bg-neutral-white/20" />
+        {post?.image ? (
+          <Image
+            src={post.image}
+            alt={post.title}
+            width={640}
+            height={480}
+            className="aspect-video min-w-full object-cover"
+          />
+        ) : (
+          <div className="aspect-video w-full bg-neutral-silver dark:bg-white/10" />
+        )}
         <p>{post.content}</p>
       </div>
     </div>

@@ -13,7 +13,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <ThemeProvider attribute="class" enableSystem={true}>
       <div
-        className={`${montserrat.className} min-h-screen bg-neutral-white text-body-2 text-neutral-lightGrey dark:bg-neutral-black dark:text-neutral-silver`}
+        className={`${montserrat.className} min-h-screen bg-neutral-white text-body-3 text-neutral-lightGrey dark:bg-neutral-black dark:text-neutral-silver sm:text-body-2`}
       >
         <Header />
         {children}

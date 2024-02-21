@@ -3,6 +3,7 @@ import { IPost } from '@/constants/interfaces'
 import handleText from '@/utils/handleText'
 import { format } from 'date-fns'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import Error from 'next/error'
 import Image from 'next/image'
 
 export const getServerSideProps = (async (context) => {
@@ -15,14 +16,21 @@ export const getServerSideProps = (async (context) => {
   }
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts/${id}`)
+  const errorCode = res.ok ? false : res.status
+
   const post = (await res.json()) as IPost
 
-  return { props: { post } }
-}) satisfies GetServerSideProps<{ post: IPost }>
+  return { props: { errorCode, post } }
+}) satisfies GetServerSideProps<{ errorCode: number | boolean; post: IPost }>
 
 const PostPage = ({
   post,
+  errorCode,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  if (errorCode) {
+    return <Error statusCode={errorCode} />
+  }
+
   return (
     <div className="container mx-auto mt-16 max-w-4xl px-6 lg:px-0">
       <GoBackButton />

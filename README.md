@@ -1,40 +1,263 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next Blog
 
-## Getting Started
+This is a simple blog built with [Next.js](https://nextjs.org/) and [Tailwind CSS (styling)](https://tailwindcss.com/docs/). It also demonstrates the uses of Next.js (pages directory) server-side rendering methods: [`getServerSideProps`](https://nextjs.org/docs/pages/building-your-application/data-fetching/get-server-side-props) and [`getStaticProps`](https://nextjs.org/docs/pages/building-your-application/data-fetching/get-static-props).
 
-First, run the development server:
+## Installation
+
+### Install Next App with Tailwind CSS: 
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx create-next-app@latest
+```
+``
+### Install Prettier to format code for consistency: 
+
+```bash
+npm install --save-dev prettier eslint-config-prettier eslint-plugin-prettier
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install Eslint to spot code errors: 
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-import-resolver-typescript
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Add rules for Eslint and Prettier in `.prettierrc.json` and `.eslintrc.json` files.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Tailwind configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Add custom colors: 
 
-## Learn More
+```ts
+// tailwind.config.ts
 
-To learn more about Next.js, take a look at the following resources:
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        neutral: {
+          black: '#263238',
+          darkGrey: '#444444',
+          grey: '#666666',
+          lightGrey: '#999999',
+          greyBlue: '#E7E7E7',
+          silver: '#F9F9F9',
+          white: '#FFFFFF',
+        },
+      }
+    },
+  },
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Add custom font sizes:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```ts
+module.exports = {
+  theme: {
+    fontSize: {
+      'heading-1': [
+        '2.25rem',
+        {
+          lineHeight: '2.75rem',
+          fontWeight: '500',
+        },
+      ],
+      ...
+    }
+  }
+}
+```
 
-## Deploy on Vercel
+### Install plugin to sort Tailwind classes automatically
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm i prettier-plugin-tailwindcss
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```ts
+//.prettierrc.json
+{
+    "plugins": ["prettier-plugin-tailwindcss"]
+}
+```
+
+## Data fetching
+
+Mock data for the project is provided by [Mock API](https://mockapi.io/). The data is fetched using two server-side rendering methods from Next.js: `getStaticProps` and `getServerSideProps`
+
+### getStaticProps
+
+`getStaticProps` is used to pre-fetch data on the server at build time (Data is available before user request). 
+
+Using `getStaticProps` to fetch posts data from an external API: 
+
+```ts
+// pages/index.tsx
+
+export const getStaticProps = (async () => {
+
+  // fetch posts data from external api
+  const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts`)
+  const errorCode = res.ok ? false : res.status
+
+  const posts = (await res.json()) as IPost[]
+
+  // return post data
+  return { props: { errorCode, posts } }
+}) satisfies GetStaticProps<{
+  errorCode: number | boolean
+  posts: IPost[]
+}>
+```
+
+Displaying the fetched data: 
+
+```ts
+export default function Home({
+  errorCode,
+  posts,
+}: InferGetServerSidePropsType<typeof getStaticProps>) {
+
+  // Render built-in Error page if there's an error
+  if (errorCode) {
+    return <Error statusCode={errorCode} />
+  }
+
+  return (
+    <main>
+      {Array.isArray(posts) && posts?.length > 0 ? (
+        <PostList posts={posts} />
+      ) : null}
+    </main>
+  )
+}
+```
+
+### getServerSideProps
+
+`getStaticProps` is used to pre-fetch data on the server on request.  
+
+Using `getStaticProps` to fetch post detail based on id: 
+
+```ts
+// pages/posts/[id].tsx
+
+export const getServerSideProps = (async (context) => {
+  // get query id from url
+  const { id } = context.query
+
+  if (typeof id !== 'string') {
+    return {
+      notFound: true,
+    }
+  }
+
+  // fetch post data based on id
+  const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts/${id}`)
+  const errorCode = res.ok ? false : res.status
+
+  const post = (await res.json()) as IPost
+
+  // return post data
+  return { props: { errorCode, post } }
+}) satisfies GetServerSideProps<{ errorCode: number | boolean; post: IPost }>
+
+```
+
+## Dark mode with Tailwind CSS
+
+The project uses `next-theme` library to quickly set up the Dark/Light mode toggle within the Next.js app: 
+
+```bash
+npm i next-theme
+```
+
+### Add Theme Provider
+
+```ts
+
+import { ThemeProvider } from 'next-themes'
+
+const MainLayout = ({ children }: { children: ReactNode }) => {
+  return (
+    <ThemeProvider attribute="class">
+      <div
+        className={`${montserrat.className} min-h-screen bg-neutral-white text-body-3 text-neutral-lightGrey dark:bg-neutral-black dark:text-neutral-silver sm:text-body-2`}
+      >
+        <Header />
+        <Footer />
+      </div>
+    </ThemeProvider>
+  )
+}
+
+export default MainLayout
+
+```
+
+### Enable Tailwind dark mode with `class` strategy
+
+```ts
+// tailwind.config.ts
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: 'class',
+  // ...
+}
+```
+
+### Create Theme Toggle Button
+
+```ts
+import { useTheme } from 'next-themes'
+import { ChangeEvent, useEffect, useState } from 'react'
+
+const ThemeToggler = () => {
+  const [mounted, setMounted] = useState(false)
+  const { theme, setTheme } = useTheme()
+
+  const handleThemeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setTheme(e.target.value)
+  }
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
+
+  return (
+    <select value={theme} onChange={handleThemeChange}>
+      <option value="dark">Dark</option>
+      <option value="light">Light</option>
+    </select>
+  )
+}
+
+export default ThemeToggler
+
+``` 
+
+## Deployment
+
+The project is deployed with [Vercel](https://vercel.com/dashboard).
+
+Link to project: https://naomi-blog.vercel.app
+
+## Run the project locally
+
+In your terminal, run the following command: 
+
+```bash
+git clone https://github.com/naomi-pham/next-blog.git
+```
+
+```
+npm install
+npm run dev
+```

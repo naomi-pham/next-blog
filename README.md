@@ -5,7 +5,7 @@ This is a simple blog built with [Next.js](https://nextjs.org/) and [Tailwind CS
 - `getStaticProps`: used to pre-fetch data on the server at build time (Data is available before user request). 
 - `getServerSideProps`: used to pre-fetch data on the server on request.
 
-## Run the project locally
+## Installation
 
 ### Clone the project
 
@@ -17,7 +17,6 @@ git clone https://github.com/naomi-pham/next-blog.git
 
 ```
 npm install
-npm run dev
 ```
 
 ### Add API URL to `.env` file
@@ -30,6 +29,14 @@ Example:
 // .env
 NEXT_PUBLIC_MOCK_API = https://65d4c1213f1ab8c63435ed16.mockapi.io/api
 ```
+
+## Run the project locally
+
+```bash
+npm run dev
+```
+
+Navigate to `locahost:3000` to view the project.
 
 ## Deployment
 

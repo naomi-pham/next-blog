@@ -1,40 +1,63 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next Blog
 
-## Getting Started
+This is a simple blog built with [Next.js](https://nextjs.org/) and [Tailwind CSS (styling)](https://tailwindcss.com/docs/). It also demonstrates the uses of Next.js (pages directory) server-side rendering methods:
 
-First, run the development server:
+- `getStaticProps`: used to pre-fetch data on the server at build time (Data is available before user request). 
+- `getServerSideProps`: used to pre-fetch data on the server on request.
+
+## Installation
+
+### Clone the project
+
+In your terminal, run the following command: 
+
+```bash
+git clone https://github.com/naomi-pham/next-blog.git
+```
+
+```
+cd next-blog
+npm install
+```
+
+### Add API URL to `.env` file
+
+Create mock data at [Mock API](https://mockapi.io/) and add the API link to your `.env` file (or use the following API): 
+
+```
+// .env
+NEXT_PUBLIC_MOCK_API = https://65d4c1213f1ab8c63435ed16.mockapi.io/api
+```
+
+Schema: 
+
+```
+{
+  datePublished: string
+  title: string
+  content: string
+  image: string
+  id: string
+}
+```
+
+## Run the project locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Navigate to http://locahost:3000 to view the project.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Steps to deploy with the [Vercel](https://vercel.com/dashboard): 
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+1. Log in to Vercel account
+2. Click on `Create a new project`
+3. Import your project's Github repository
+4. Add environment keys (.env file)
+5. Click on `Build`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Demo link: https://naomi-blog.vercel.app
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

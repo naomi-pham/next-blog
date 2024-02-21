@@ -1,6 +1,6 @@
 import PostList from '@/components/posts/PostList'
 import { IPost } from '@/constants/interfaces'
-import { GetStaticProps, InferGetServerSidePropsType } from 'next'
+import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import Error from 'next/error'
 
 export const getStaticProps = (async () => {
@@ -18,7 +18,7 @@ export const getStaticProps = (async () => {
 export default function Home({
   errorCode,
   posts,
-}: InferGetServerSidePropsType<typeof getStaticProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   if (errorCode) {
     return <Error statusCode={errorCode} />
   }

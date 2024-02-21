@@ -1,4 +1,4 @@
-export default function handleText(value: any): any {
+export default function handleText(value: number | string | undefined | null) {
   if (value === undefined || value === null) {
     return '-'
   } else {

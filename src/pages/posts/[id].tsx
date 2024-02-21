@@ -44,7 +44,7 @@ const PostPage = ({
         {post?.image ? (
           <Image
             src={post.image}
-            alt={handleText(post.title)}
+            alt={post.title}
             width={640}
             height={480}
             className="aspect-video min-w-full object-cover"

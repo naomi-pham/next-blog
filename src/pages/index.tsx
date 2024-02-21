@@ -1,6 +1,5 @@
 import PostList from '@/components/posts/PostList'
 import { IPost } from '@/constants/interfaces'
-import handleText from '@/utils/handleText'
 import { GetStaticProps, InferGetServerSidePropsType } from 'next'
 
 export const getStaticProps = (async () => {

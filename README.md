@@ -9,7 +9,7 @@ This is a simple blog built with [Next.js](https://nextjs.org/) and [Tailwind CS
 ```bash
 npx create-next-app@latest
 ```
-``
+
 ### Install Prettier to format code for consistency: 
 
 ```bash

@@ -1,18 +1,13 @@
 import PostList from '@/components/posts/PostList'
 import { IPost } from '@/constants/interfaces'
+import handleText from '@/utils/handleText'
 import { GetStaticProps, InferGetServerSidePropsType } from 'next'
 
 export const getStaticProps = (async () => {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts`)
-    const posts = (await res.json()) as IPost[]
+  const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts`)
+  const posts = (await res.json()) as IPost[]
 
-    return { props: { posts } }
-  } catch (error) {
-    return {
-      notFound: true,
-    }
-  }
+  return { props: { posts } }
 }) satisfies GetStaticProps<{
   posts: IPost[]
 }>

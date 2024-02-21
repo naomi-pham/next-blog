@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import React from 'react'
 
 const AboutPage = () => {
   return (
@@ -17,20 +16,6 @@ const AboutPage = () => {
           repellat perferendis optio minima vitae vel culpa molestiae libero.
           Molestias neque cupiditate laboriosam!
         </p>
-        <Image
-          src="https://loremflickr.com/640/480/city"
-          alt="about-image"
-          width={640}
-          height={480}
-          className="aspect-video w-full object-cover"
-        />
-        <Image
-          src="https://loremflickr.com/640/480/city"
-          alt="about-image"
-          width={640}
-          height={480}
-          className="aspect-video w-full object-cover"
-        />
         <Image
           src="https://loremflickr.com/640/480/city"
           alt="about-image"

@@ -1,4 +1,5 @@
 import { IPost } from '@/constants/interfaces'
+import handleText from '@/utils/handleText'
 import trimText from '@/utils/trimText'
 import { format } from 'date-fns'
 import Image from 'next/image'
@@ -10,7 +11,7 @@ const PostCard = ({ post }: { post: IPost }) => {
       {post?.image ? (
         <Image
           src={post.image}
-          alt={post.title}
+          alt={handleText(post?.title)}
           width={640}
           height={480}
           className="aspect-video w-full object-cover"
@@ -28,9 +29,11 @@ const PostCard = ({ post }: { post: IPost }) => {
           '-'
         )}
         <h3 className="text-heading-3 font-medium capitalize text-neutral-darkGrey dark:text-neutral-white">
-          {post.title}
+          {handleText(post?.title)}
         </h3>
-        <p className="font-light">{trimText(post.content, 100)}...</p>
+        <p className="font-light">
+          {trimText(handleText(post?.content), 100)}...
+        </p>
         <Link href={`/posts/${post.id}`} className="custom-link">
           See more
         </Link>

@@ -1,18 +1,26 @@
 import PostList from '@/components/posts/PostList'
 import { IPost } from '@/constants/interfaces'
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { GetStaticProps, InferGetServerSidePropsType } from 'next'
 
-export const getServerSideProps = (async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts`)
-  const posts = await res.json() as IPost[]
+export const getStaticProps = (async () => {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts`)
+    const posts = (await res.json()) as IPost[]
 
-  return { props: { posts } }
-}) satisfies GetServerSideProps<{ posts: IPost[] }>
+    return { props: { posts } }
+  } catch (error) {
+    return {
+      notFound: true,
+    }
+  }
+}) satisfies GetStaticProps<{
+  posts: IPost[]
+}>
 
 export default function Home({
   posts,
 }: {
-  posts: InferGetServerSidePropsType<typeof getServerSideProps>
+  posts: InferGetServerSidePropsType<typeof getStaticProps>
 }) {
   return (
     <main className="container mx-auto mt-16 max-w-4xl px-6 lg:px-0">

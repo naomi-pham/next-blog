@@ -1,41 +1,33 @@
 import GoBackButton from '@/components/common/navigation/GoBackButton'
 import { IPost } from '@/constants/interfaces'
 import { format } from 'date-fns'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Image from 'next/image'
 
-export async function getStaticPaths() {
-  if (process.env.SKIP_BUILD_STATIC_GENERATION) {
+export const getServerSideProps = (async (context) => {
+  const { id } = context.query
+
+  if (typeof id !== 'string') {
     return {
-      paths: [],
-      fallback: 'blocking',
+      notFound: true,
     }
   }
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts`)
-  const posts = (await res.json()) as IPost[]
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts/${id}`)
+    const post = (await res.json()) as IPost
 
-  const paths = posts.map((post: IPost) => ({
-    params: { id: post.id },
-  }))
+    return { props: { post } }
+  } catch (error) {
+    return {
+      notFound: true,
+    }
+  }
+}) satisfies GetServerSideProps<{ post: IPost }>
 
-  // { fallback: false } means other routes should 404
-  return { paths, fallback: false }
-}
-
-export const getStaticProps = async ({
-  params,
-}: {
-  params: { id: string }
-}) => {
-  const id = params.id
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts/${id}`)
-  const post = (await res.json()) as IPost
-
-  return { props: { post: { ...post } } }
-}
-
-const PostPage = ({ post }: { post: IPost }) => {
+const PostPage = ({
+  post,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <div className="container mx-auto mt-16 max-w-4xl px-6 lg:px-0">
       <GoBackButton />

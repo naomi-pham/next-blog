@@ -17,7 +17,7 @@ const AboutPage = () => {
           Molestias neque cupiditate laboriosam!
         </p>
         <Image
-          src="https://loremflickr.com/640/480/city"
+          src="https://loremflickr.com/640/480/abstract"
           alt="about-image"
           width={640}
           height={480}

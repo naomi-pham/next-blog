@@ -6,10 +6,9 @@ import Error from 'next/error'
 export const getStaticProps = (async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts`)
   const errorCode = res.ok ? false : res.status
-
   const posts = (await res.json()) as IPost[]
 
-  return { props: { errorCode, posts } }
+  return { props: { errorCode, posts }, revalidate: 60 }
 }) satisfies GetStaticProps<{
   errorCode: number | boolean
   posts: IPost[]

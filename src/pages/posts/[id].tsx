@@ -17,7 +17,6 @@ export const getServerSideProps = (async (context) => {
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API}/posts/${id}`)
   const errorCode = res.ok ? false : res.status
-
   const post = (await res.json()) as IPost
 
   return { props: { errorCode, post } }
@@ -32,13 +31,13 @@ const PostPage = ({
   }
 
   return (
-    <div className="container mx-auto mt-16 max-w-4xl px-6 lg:px-0">
+    <main className="container mx-auto mt-16 max-w-4xl px-6 lg:px-0">
       <GoBackButton />
 
       <div className="mt-10 flex flex-col gap-10">
         <div className="space-y-4">
           <h2 className="text-heading-2 text-neutral-darkGrey dark:text-neutral-white">
-            {handleText(post.title)}
+            {handleText(post?.title)}
           </h2>
           <p className="text-body-3 tracking-widest text-neutral-grey dark:text-neutral-greyBlue">
             {post?.datePublished ? (
@@ -60,9 +59,9 @@ const PostPage = ({
         ) : (
           <div className="aspect-video w-full bg-neutral-silver dark:bg-white/10" />
         )}
-        <p>{handleText(post.content)}</p>
+        <p>{handleText(post?.content)}</p>
       </div>
-    </div>
+    </main>
   )
 }
 
